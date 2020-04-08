@@ -9,7 +9,8 @@ from django.shortcuts import (
 from django.contrib.admin import SimpleListFilter
 from .forms import HelpRequestForm
 from .models import HelpRequest
-
+import json
+from django.http import HttpResponse
 # Create your views here.
 
 
@@ -35,13 +36,15 @@ def view_request(request, id):
         "help_request": help_request,
         "thumbnail": help_request.thumb if help_request.picture else None,
     }
-    if request.POST:
-        if request.POST['vote']:
-            if request.POST['vote'] == 'up':
-                help_request.upvotes += 1
-            elif request.POST['vote'] == 'down':
-                help_request.downvotes += 1
-            help_request.save()
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        if data['g-recaptcha-response']:
+            response = request.POST.get('g-recaptcha-response')
+            if not response:
+                res = help_request.phone
+                return HttpResponse(res, content_type="application/json")
+            else:
+                return None
     return render(request, "request.html", context)
 
 
