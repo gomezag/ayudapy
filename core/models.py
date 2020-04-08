@@ -54,8 +54,8 @@ class HelpRequest(models.Model):
     added = models.DateTimeField("Agregado", auto_now_add=True, null=True, blank=True, db_index=True)
     city = models.CharField(max_length=30, blank=True, default="", editable=False)
     city_code = models.CharField(max_length=30, blank=True, default="", editable=False)
-    upvotes = models.IntegerField(default=0, blank=True)
-    downvotes = models.IntegerField(default=0, blank=True)
+    votsi = models.IntegerField(default=0, blank=True)
+    votno = models.IntegerField(default=0, blank=True)
 
     @property
     def thumb(self):
