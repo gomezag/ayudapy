@@ -63,7 +63,7 @@ class HelpRequest(models.Model):
         return f"{filepath}_th{extension}"
 
     def _get_city(self):
-        geolocator = Nominatim(user_agent="ayudapy")
+        geolocator = Nominatim(user_agent="ayudapy", timeout=3)
         cordstr = "%s, %s" % self.location.coords[::-1]
         location = geolocator.reverse(cordstr, language='es')
         city = ''
@@ -73,7 +73,7 @@ class HelpRequest(models.Model):
             elif location.raw['address'].get('town'):
                 city = location.raw['address']['town']
             elif location.raw['address'].get('locality'):
-                city = city = location.raw['address']['locality']
+                city = location.raw['address']['locality']
         return city
 
     def save(self):
