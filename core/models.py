@@ -34,8 +34,7 @@ class HelpRequest(models.Model):
         "Dirección",
         help_text="Es opcional pero puede ayudar a quien quiera ayudarte saber la direccion, ciudad, barrio, referencias, o como llegar",
         max_length=400,
-        null=True,
-        blank=True,
+        null=True
     )
     location = models.PointField(
         "Ubicación",
@@ -52,10 +51,10 @@ class HelpRequest(models.Model):
     )
     active = models.BooleanField(default=True, db_index=True)
     added = models.DateTimeField("Agregado", auto_now_add=True, null=True, blank=True, db_index=True)
+    upvotes = models.IntegerField(default=0, blank=True)
+    downvotes = models.IntegerField(default=0, blank=True)
     city = models.CharField(max_length=30, blank=True, default="", editable=False)
     city_code = models.CharField(max_length=30, blank=True, default="", editable=False)
-    votsi = models.IntegerField(default=0, blank=True)
-    votno = models.IntegerField(default=0, blank=True)
 
     @property
     def thumb(self):

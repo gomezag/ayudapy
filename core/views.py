@@ -34,7 +34,7 @@ def view_request(request, id):
     help_request = get_object_or_404(HelpRequest, pk=id)
     context = {
         "help_request": help_request,
-        "thumbnail": help_request.thumb if help_request.picture else None,
+        "thumbnail": help_request.thumb if help_request.picture else "/static/favicon.ico",
     }
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -51,7 +51,7 @@ def view_request(request, id):
 def list_requests(request):
     list_help_requests = HelpRequest.objects.filter(active=True).order_by("-added")  # TODO limit this
     cities = [(i['city'], i['city_code']) for i in HelpRequest.objects.all().values('city', 'city_code').distinct().order_by('city_code')]
-    query = list_help_requests[:200]
+    query = list_help_requests
     geo = serialize("geojson", query, geometry_field="location", fields=("name", "pk", "title", "added"))
     context = {"list_cities": cities, "list_help": list_help_requests, "geo": geo}
     return render(request, "list.html", context)
@@ -60,7 +60,7 @@ def list_requests(request):
 def list_by_city(request, city):
     list_help_requests = HelpRequest.objects.filter(city_code=city).order_by("-added")  # TODO limit this
     city = list_help_requests[0].city
-    query = list_help_requests[:200]
+    query = list_help_requests
     geo = serialize("geojson", query, geometry_field="location", fields=("name", "pk", "title", "added"))
     context = {"list_help": list_help_requests, "geo": geo, "city": city}
     return render(request, "list_by_city.html", context)
